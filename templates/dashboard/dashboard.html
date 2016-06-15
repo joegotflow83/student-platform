@@ -9,6 +9,8 @@
     <a href="{% url 'create_class' %}" class="waves-effect waves-light btn">Create Class</a>
   {% else %}
     <h2>Hello Student {{ user }}</h2>
+    <a href="{% url 'list_classes' %}" class="waves-effect waves-light btn">View Classes</a>
+    <a href="{% url 'student_classes' user.pk %}" class="waves-effect waves-light btn">View Your Classes</a>
   {% endif %}
 </div>
 {% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Classes{% endblock %}
+
+{% block content %}
+<div class="container">
+<br>
+{% for class in object_list %}
+  <table class="striped">
+    <tr>
+      <th>Name</th>
+      <th>Level</th>
+      <th>Credits</th>
+      <th>Location</th>
+      <th>Start Date</th>
+      <th>End Time</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Seats</th>
+      <th></th>
+    </tr>
+    <tr>
+      <td>{{ class.name }}</td>
+      <td>{{ class.level }}</td>
+      <td>{{ class.credit }}</td>
+      <td>{{ class.location }}</td>
+      <td>{{ class.start_date | date }}</td>
+      <td>{{ class.end_date | date }}</td>
+      <td>{{ class.start_time }}</td>
+      <td>{{ class.end_time }}</td>
+      <td>{{ class.taken }}/{{ class.limit}}</td>
+      <td><a href="{% url 'add_class' class.pk  %}">Add Class</a></td>
+    </tr>
+  </table>
+{% endfor %}
+</div>
+{% endblock %}

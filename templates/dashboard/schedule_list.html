@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <br>
+  {% for class in classes %}
+    <table class="striped">
+      <tr>
+        <th>Name</th>
+        <th>Level</th>
+        <th>Credits</th>
+        <th>Location</th>
+        <th>Start Date</th>
+        <th>End Time</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+      </tr>
+      <tr>
+        <td>{{ class.name }}</td>
+        <td>{{ class.level }}</td>
+        <td>{{ class.credit }}</td>
+        <td>{{ class.location }}</td>
+        <td>{{ class.start_date | date }}</td>
+        <td>{{ class.end_date | date }}</td>
+        <td>{{ class.start_time }}</td>
+        <td>{{ class.end_time }}</td>
+      </tr>
+    </table>
+  {% endfor %}
+</div>
+{% endblock %}
