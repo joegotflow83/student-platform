@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}{% endblock %}
+{% block title %}Classes{% endblock %}
 
 {% block content %}
 <div class="container">
   <br>
-  {% for class in classes %}
-    <h3>Your Classes</h3>
+  {% for class in object_list %}
     <table class="striped">
       <tr>
         <th>Name</th>
@@ -17,7 +16,8 @@
         <th>End Time</th>
         <th>Start Time</th>
         <th>End Time</th>
-        <th></th>
+        <th>Teacher</th>
+        <th>Seats</th>
       </tr>
       <tr>
         <td>{{ class.name }}</td>
@@ -28,11 +28,10 @@
         <td>{{ class.end_date | date }}</td>
         <td>{{ class.start_time }}</td>
         <td>{{ class.end_time }}</td>
-        <th><a href="{% url 'remove_class' class.pk %}">Remove Class</a></th>
+        <th>{{ class.user.username }}</th>
+        <td>{{ class.taken }}/{{ class.limit}}</td>
       </tr>
     </table>
-  {% empty %}
-    <p>You have not signed up for any classes yet.</p>
   {% endfor %}
 </div>
 {% endblock %}

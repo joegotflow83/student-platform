@@ -7,6 +7,7 @@
   {% if user.userprofile.teacher %}
     <h2>Hello Teacher {{ user }}</h2>
     <a href="{% url 'create_class' %}" class="waves-effect waves-light btn">Create Class</a>
+    <a href="{% url 'teacher_classes' %}" class="waves-effect waves-light btn">View Your Classes</a>
   {% else %}
     <h2>Hello Student {{ user }}</h2>
     <a href="{% url 'list_classes' %}" class="waves-effect waves-light btn">View Classes</a>

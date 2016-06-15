@@ -16,20 +16,25 @@
       <th>End Time</th>
       <th>Start Time</th>
       <th>End Time</th>
+      <th>Teacher</th>
       <th>Seats</th>
       <th></th>
     </tr>
     <tr>
       <td>{{ class.name }}</td>
       <td>{{ class.level }}</td>
-      <td>{{ class.credit }}</td>
+      <td>{{ class.credits }}</td>
       <td>{{ class.location }}</td>
       <td>{{ class.start_date | date }}</td>
       <td>{{ class.end_date | date }}</td>
       <td>{{ class.start_time }}</td>
       <td>{{ class.end_time }}</td>
+      <th>{{ class.user.username }}</th>
       <td>{{ class.taken }}/{{ class.limit}}</td>
-      <td><a href="{% url 'add_class' class.pk  %}">Add Class</a></td>
+      {% if has_course %}
+      {% else %}
+        <td><a href="{% url 'add_class' class.pk  %}">Add Class</a></td>
+      {% endif %}
     </tr>
   </table>
 {% endfor %}

@@ -14,15 +14,44 @@ class Dashboard(TemplateView):
 class CreateClass(CreateView):
     """Teachers can create classes"""
     model = Class
-    fields = '__all__'
+    fields = ['name', 'level', 'credits', 'location', 'start_date', 'end_date', 'start_time', 'end_time', 'limit']
+
+    def form_valid(self, form):
+        new_class = form.save(commit=False)
+        new_class.user = self.request.user
+        new_class.save()
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('dashboard')
 
 
-class ListClasses(ListView):
+class StudentListClasses(ListView):
     """Display classes that the student to take"""
     model = Class
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        schedule = Schedule.objects.get(user=self.request.user)
+        for course in Class.objects.all():
+            for _class in schedule.classes.all():
+                if course == _class:
+                    context['has_course'] = True
+                    print(context['has_course'])
+            else:
+                context['has_course'] = False
+                print(context['has_course'])
+                return context
+        return context
+
+
+class TeacherListClasses(ListView):
+    """Display classes that the teacher as created"""
+    model = Class
+    template_name = 'dashboard/teacher_classlist.html'
+
+    def get_queryset(self):
+        return Class.objects.filter(user=self.request.user)
 
 
 class AddClass(View):
@@ -31,6 +60,21 @@ class AddClass(View):
         _class = Class.objects.get(pk=pk)
         schedule = Schedule.objects.get(user=request.user)
         schedule.classes.add(_class)
+        schedule.save()
+        _class.taken += 1
+        _class.save()
+        return redirect('dashboard')
+
+
+class RemoveClass(View):
+    """Allow a student to drop a class"""
+    def get(self, request, pk):
+        _class = Class.objects.get(pk=pk)
+        schedule = Schedule.objects.get(user=request.user)
+        schedule.classes.remove(_class)
+        schedule.save()
+        _class.taken -= 1
+        _class.save()
         return redirect('dashboard')
 
 
