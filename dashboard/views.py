@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView, View
+from django.views.generic import TemplateView, ListView, DetailView, View
 from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
@@ -14,6 +14,7 @@ class Dashboard(TemplateView):
 class CreateClass(CreateView):
     """Teachers can create classes"""
     model = Class
+    template_name = 'dashboard/teacher/class_form.html'
     fields = ['name', 'level', 'credits', 'location', 'start_date', 'end_date', 'start_time', 'end_time', 'limit']
 
     def form_valid(self, form):
@@ -29,6 +30,7 @@ class CreateClass(CreateView):
 class StudentListClasses(ListView):
     """Display classes that the student to take"""
     model = Class
+    template_name = 'dashboard/student/class_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,9 +48,9 @@ class StudentListClasses(ListView):
 
 
 class TeacherListClasses(ListView):
-    """Display classes that the teacher as created"""
+    """Display classes that the teacher has created"""
     model = Class
-    template_name = 'dashboard/teacher_classlist.html'
+    template_name = 'dashboard/teacher/teacher_classlist.html'
 
     def get_queryset(self):
         return Class.objects.filter(user=self.request.user)
@@ -60,7 +62,6 @@ class AddClass(View):
         _class = Class.objects.get(pk=pk)
         schedule = Schedule.objects.get(user=request.user)
         schedule.classes.add(_class)
-        schedule.save()
         _class.taken += 1
         _class.save()
         return redirect('dashboard')
@@ -72,7 +73,6 @@ class RemoveClass(View):
         _class = Class.objects.get(pk=pk)
         schedule = Schedule.objects.get(user=request.user)
         schedule.classes.remove(_class)
-        schedule.save()
         _class.taken -= 1
         _class.save()
         return redirect('dashboard')
@@ -80,10 +80,16 @@ class RemoveClass(View):
 
 class ViewStudentClasses(TemplateView):
     """Display all the classes the student is enrolled in"""
-    template_name = 'dashboard/schedule_list.html'
+    template_name = 'dashboard/student/schedule_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         schedule = Schedule.objects.get(user=self.request.user)
         context['classes'] = schedule.classes.all()
         return context
+
+
+class TeacherClassDetail(DetailView):
+    """Details about a specific class from teachers side"""
+    model = Class
+    template_name = 'dashboard/teacher/class_detail.html'

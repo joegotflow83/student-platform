@@ -19,3 +19,9 @@ class Class(models.Model):
 class Schedule(models.Model):
     user = models.ForeignKey(User)
     classes = models.ManyToManyField(Class, blank=True)
+
+
+class Announcement(models.Model):
+    user = models.ForeignKey(User)
+    title = models.CharField(max_length=128)
+    body = models.TextField()
