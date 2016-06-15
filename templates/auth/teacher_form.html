@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="container">
-  <h3>Student Sign Up</h3>
-  <form method="post" action="{% url 'user_signup' %}">
+  <h3>Teacher Sign Up</h3>
+  <form method="post" action="{% url 'teacher_signup' %}">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" class="waves-effect waves-light btn">
