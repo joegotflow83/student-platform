@@ -28,7 +28,7 @@
         <td>{{ class.end_date | date }}</td>
         <td>{{ class.start_time }}</td>
         <td>{{ class.end_time }}</td>
-        <th><a href="{% url 'remove_class' class.pk %}">Remove Class</a></th>
+        <th><a href="{% url 'remove_class' class.pk user.pk %}">Remove Class</a></th>
       </tr>
     </table>
   {% empty %}

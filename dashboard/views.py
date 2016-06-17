@@ -2,8 +2,9 @@ from django.views.generic import TemplateView, ListView, DetailView, View
 from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
+from django.db.models import Q
 
-from .models import Class, Schedule
+from .models import Class, Schedule, Student
 
 
 class Dashboard(TemplateView):
@@ -60,6 +61,9 @@ class AddClass(View):
     """Allow a student to enroll in a class"""
     def get(self, request, pk):
         _class = Class.objects.get(pk=pk)
+        new_student = Student(user=request.user, name_of_class=_class.name)
+        new_student.save()
+        _class.students.add(new_student)
         schedule = Schedule.objects.get(user=request.user)
         schedule.classes.add(_class)
         _class.taken += 1
@@ -69,8 +73,10 @@ class AddClass(View):
 
 class RemoveClass(View):
     """Allow a student to drop a class"""
-    def get(self, request, pk):
-        _class = Class.objects.get(pk=pk)
+    def get(self, request, class_pk, student_pk):
+        _class = Class.objects.get(pk=class_pk)
+        student = Student.objects.get(Q(user=student_pk), Q(name_of_class=_class.name))
+        _class.students.remove(student)
         schedule = Schedule.objects.get(user=request.user)
         schedule.classes.remove(_class)
         _class.taken -= 1
@@ -93,3 +99,9 @@ class TeacherClassDetail(DetailView):
     """Details about a specific class from teachers side"""
     model = Class
     template_name = 'dashboard/teacher/class_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        subject = Class.objects.get(pk=self.kwargs['pk'])
+        context['students'] = subject.students.all()
+        return context

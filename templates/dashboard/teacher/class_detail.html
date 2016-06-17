@@ -5,5 +5,24 @@
 {% block content %}
 <div class="container">
   <h3>{{ object.name }}</h3>
+  <h4>Students Enrolled:</h4>
+  {% for student in students %}
+    <table class="striped">
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Grade</th>
+        <th>Letter</th>
+      </tr>
+      <tr>
+        <td>{{ student.user.first_name }}</td>
+        <td>{{ student.user.last_name }}</td>
+        <td>{{ student.user.email }}</td>
+        <td>{{ student.grade }}</td>
+        <td>{{ student.letter }}</td>
+      </tr>
+    </table>
+  {% endfor %}
 </div>
 {% endblock %}

@@ -6,13 +6,14 @@ from django.core.urlresolvers import reverse
 from .models import UserProfile
 
 
-class UserSignup(CreateView):
+class StudentSignup(CreateView):
+    """New students can sign up"""
     model = User
     form_class = UserCreationForm
 
     def form_valid(self, form):
-        new_user = form.save(commit=False)
-        UserProfile.objects.create(pk=new_user.pk)
+        new_student = form.save()
+        UserProfile.objects.create(pk=new_student)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -20,13 +21,14 @@ class UserSignup(CreateView):
 
 
 class TeacherSignup(CreateView):
+    """New teachers can sign up """
     model = User
     form_class = UserCreationForm
     template_name = 'auth/teacher_form.html'
 
     def form_valid(self, form):
-        new_teacher = form.save(commit=False)
-        UserProfile.objects.create(pk=new_teacher.pk, teacher=True)
+        new_teacher = form.save()
+        UserProfile.objects.create(user=new_teacher, teacher=True)
         return super().form_valid(form)
 
     def get_success_url(self):

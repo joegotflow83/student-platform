@@ -16,7 +16,6 @@
         <th>End Time</th>
         <th>Start Time</th>
         <th>End Time</th>
-        <th>Teacher</th>
         <th>Seats</th>
       </tr>
       <tr>
@@ -28,7 +27,6 @@
         <td>{{ class.end_date | date }}</td>
         <td>{{ class.start_time }}</td>
         <td>{{ class.end_time }}</td>
-        <th>{{ class.user.username }}</th>
         <td>{{ class.taken }}/{{ class.limit}}</td>
       </tr>
     </table>
