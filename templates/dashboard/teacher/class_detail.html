@@ -24,5 +24,10 @@
       </tr>
     </table>
   {% endfor %}
+  <span>
+  <a href="{% url 'add_quiz' object.pk %}" class="waves-effect waves-light btn">Add Quiz</a>
+  <a href="{% url 'create_announcement' object.pk  %}" class="waves-effect waves-light btn">Create Announcement</a>
+  <a href="{% url 'upload_file' object.pk %}" class="waves-effect waves-light btn">Upload File</a>
+  </span>
 </div>
 {% endblock %}

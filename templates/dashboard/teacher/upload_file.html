@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload File{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h3>Upload File:</h3>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Upload file" class="waves-effect waves-light btn">
+  </form>
+</div>
+{% endblock %}

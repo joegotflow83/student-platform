@@ -4,6 +4,7 @@ from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse
 
 from .models import UserProfile
+from dashboard.models import Schedule
 
 
 class StudentSignup(CreateView):
@@ -13,7 +14,8 @@ class StudentSignup(CreateView):
 
     def form_valid(self, form):
         new_student = form.save()
-        UserProfile.objects.create(pk=new_student)
+        UserProfile.objects.create(user=new_student)
+        Schedule.objects.create(user=new_student)
         return super().form_valid(form)
 
     def get_success_url(self):

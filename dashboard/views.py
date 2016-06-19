@@ -1,10 +1,11 @@
 from django.views.generic import TemplateView, ListView, DetailView, View
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormView
 from django.core.urlresolvers import reverse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.db.models import Q
 
-from .models import Class, Schedule, Student
+from .models import Class, Schedule, Student, Announcement, File
+from .forms import ScoreForm, FileForm
 
 
 class Dashboard(TemplateView):
@@ -79,6 +80,7 @@ class RemoveClass(View):
         _class.students.remove(student)
         schedule = Schedule.objects.get(user=request.user)
         schedule.classes.remove(_class)
+        student.delete()
         _class.taken -= 1
         _class.save()
         return redirect('dashboard')
@@ -105,3 +107,73 @@ class TeacherClassDetail(DetailView):
         subject = Class.objects.get(pk=self.kwargs['pk'])
         context['students'] = subject.students.all()
         return context
+
+
+class StudentClassDetail(DetailView):
+    """Details about a specific class from students side"""
+    model = Class
+    template_name = 'dashboard/student/class_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['announcements'] = Announcement.objects.filter(_class=self.kwargs['pk']).order_by('-created')
+        context['files'] = File.objects.filter(_class=self.kwargs['pk']).order_by('-created')
+        return context
+
+
+class AddQuiz(View):
+    """Teachers can add a new quiz scores to gradebook"""
+    def post(self, request, pk):
+        form = ScoreForm(request.POST)
+        print(form)
+        if form.is_valid():
+            form.save()
+        return redirect('dashboard')
+
+    def get(self, request, pk):
+        _class = Class.objects.get(pk=self.kwargs['pk'])
+        form = ScoreForm()
+        return render(request, 'dashboard/teacher/quiz.html',
+                      {'students':  _class.students.all(),
+                       'class_id': _class.pk,
+                       'form': form})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        _class = Class.objects.get(pk=self.kwargs['pk'])
+        context['students'] = _class.students.all()
+        context['class_id'] = _class.pk
+        return context
+
+
+class CreateAnnouncement(CreateView):
+    """Teachers can create announcements for their classes"""
+    model = Announcement
+    fields = ('title', 'body')
+    template_name = 'dashboard/teacher/announcement_form.html'
+
+    def form_valid(self, form):
+        new_announcement = form.save(commit=False)
+        new_announcement.user = self.request.user
+        _class = Class.objects.get(pk=self.kwargs['pk'])
+        new_announcement._class = _class
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('teacher_course_detail', kwargs={'pk': self.kwargs['pk']})
+
+
+class UploadFile(FormView):
+    model = File
+    template_name = 'dashboard/teacher/upload_file.html'
+    form_class = FileForm
+
+    def form_valid(self, form):
+        new_file = form.save(commit=False)
+        _class = Class.objects.get(pk=self.kwargs['pk'])
+        new_file._class = _class
+        new_file.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('teacher_course_detail', kwargs={'pk': self.kwargs['pk']})

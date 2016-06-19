@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+<h3>Announcements:</h3>
+  {% for announcement in announcements %}
+    <p>{{ announcement.title }}</p>
+    <p>{{ announcement.body }}</p>
+    <p>{{ announcement.created }}</p>
+  {% endfor %}
+  <h3>File Uploads:</h3>
+  {% for file in files %}
+    <p>{{ file.name }}</p>
+    <p><a href="{{ file.file_upload }}">{{ file.file_upload }}</a></p>
+    <p>{{ file.created }}</p>
+  {% endfor %}
+</div>
+{% endblock %}

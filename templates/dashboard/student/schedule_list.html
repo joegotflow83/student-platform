@@ -20,7 +20,7 @@
         <th></th>
       </tr>
       <tr>
-        <td>{{ class.name }}</td>
+        <td><a href="{% url 'student_course_detail' class.pk %}">{{ class.name }}</a></td>
         <td>{{ class.level }}</td>
         <td>{{ class.credits }}</td>
         <td>{{ class.location }}</td>

@@ -23,6 +23,9 @@ class Class(models.Model):
     taken = models.IntegerField(default=0)
     students = models.ManyToManyField(Student)
 
+    def __str__(self):
+        return self.name
+
 
 class Schedule(models.Model):
     user = models.ForeignKey(User)
@@ -31,5 +34,24 @@ class Schedule(models.Model):
 
 class Announcement(models.Model):
     user = models.ForeignKey(User)
+    _class = models.ForeignKey(Class)
     title = models.CharField(max_length=128)
     body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class Quiz(models.Model):
+    _class = models.ForeignKey(Class)
+    name = models.CharField(max_length=128)
+    grade = models.IntegerField()
+
+
+class Score(models.Model):
+    score = models.IntegerField()
+
+
+class File(models.Model):
+    name = models.CharField(max_length=128)
+    file_upload = models.FileField(upload_to="files/")
+    created = models.DateTimeField(auto_now_add=True)
+    _class = models.ForeignKey(Class)
