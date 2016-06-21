@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Student(models.Model):
+    """As in enrolled for a particular class"""
     user = models.ForeignKey(User)
     name_of_class = models.CharField(max_length=64)
     grade = models.IntegerField(default=100)
