@@ -1,12 +1,6 @@
 from django import forms
 
-from .models import Score, File
-
-
-class ScoreForm(forms.ModelForm):
-    class Meta:
-        model = Score
-        fields = ('score',)
+from .models import File
 
 
 class FileForm(forms.ModelForm):

@@ -47,10 +47,6 @@ class Quiz(models.Model):
     grade = models.IntegerField()
 
 
-class Score(models.Model):
-    score = models.IntegerField()
-
-
 class File(models.Model):
     name = models.CharField(max_length=128)
     file_upload = models.FileField(upload_to="files/")

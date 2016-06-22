@@ -14,6 +14,5 @@ urlpatterns = [
     url(r'^course/(?P<pk>\d+)/$', views.TeacherClassDetail.as_view(), name='teacher_course_detail'),
     url(r'^class/(?P<pk>\d+)/$', views.StudentClassDetail.as_view(), name='student_course_detail'),
     url(r'^create/class/announcement/(?P<pk>\d+)/$', views.CreateAnnouncement.as_view(), name='create_announcement'),
-    url(r'^add/quiz/(?P<pk>\d+)/$', views.AddQuiz.as_view(), name='add_quiz'),
     url(r'^upload/file/(?P<pk>\d+)/$', views.UploadFile.as_view(), name='upload_file'),
 ]

@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.db.models import Q
 
 from .models import Class, Schedule, Student, Announcement, File
-from .forms import ScoreForm, FileForm
+from .forms import FileForm
 
 
 class Dashboard(TemplateView):
@@ -118,31 +118,6 @@ class StudentClassDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['announcements'] = Announcement.objects.filter(_class=self.kwargs['pk']).order_by('-created')
         context['files'] = File.objects.filter(_class=self.kwargs['pk']).order_by('-created')
-        return context
-
-
-class AddQuiz(View):
-    """Teachers can add a new quiz scores to gradebook"""
-    def post(self, request, pk):
-        form = ScoreForm(request.POST)
-        print(form)
-        if form.is_valid():
-            form.save()
-        return redirect('dashboard')
-
-    def get(self, request, pk):
-        _class = Class.objects.get(pk=self.kwargs['pk'])
-        form = ScoreForm()
-        return render(request, 'dashboard/teacher/quiz.html',
-                      {'students':  _class.students.all(),
-                       'class_id': _class.pk,
-                       'form': form})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        _class = Class.objects.get(pk=self.kwargs['pk'])
-        context['students'] = _class.students.all()
-        context['class_id'] = _class.pk
         return context
 
 
