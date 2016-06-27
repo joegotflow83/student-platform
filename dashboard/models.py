@@ -9,6 +9,9 @@ class Student(models.Model):
     grade = models.IntegerField(default=100)
     letter = models.CharField(max_length=1, default='A')
 
+    def __str__(self):
+        return self.name_of_class
+
 
 class Class(models.Model):
     user = models.ForeignKey(User)
@@ -40,11 +43,17 @@ class Announcement(models.Model):
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
+
 
 class Quiz(models.Model):
     _class = models.ForeignKey(Class)
     name = models.CharField(max_length=128)
     grade = models.IntegerField()
+
+    def __str__(self):
+        return self.name
 
 
 class File(models.Model):
@@ -52,3 +61,6 @@ class File(models.Model):
     file_upload = models.FileField(upload_to="files/")
     created = models.DateTimeField(auto_now_add=True)
     _class = models.ForeignKey(Class)
+
+    def __str__(self):
+        return self.name

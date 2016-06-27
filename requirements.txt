@@ -1,11 +1,13 @@
 appnope==0.1.0
 backports.shutil-get-terminal-size==1.0.0
 decorator==4.0.10
+defusedxml==0.4.1
 Django==1.9.7
 djangorestframework==3.3.3
 gnureadline==6.3.3
 ipython==4.2.0
 ipython-genutils==0.1.0
+lxml==3.6.0
 pexpect==4.1.0
 pickleshare==0.7.2
 ptyprocess==0.5.1
