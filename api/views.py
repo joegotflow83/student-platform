@@ -26,7 +26,7 @@ class UsersListCreateAPIView(generics.ListCreateAPIView):
     queryset = User.objects.all()
 
 
-class UserRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
+class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     """Single user endpoint"""
     serializer_class = UserSerializer
 
