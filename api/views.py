@@ -34,15 +34,27 @@ class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         return User.objects.filter(pk=self.kwargs['pk'])
 
 
-"""class AnnouncementsListCreateAPIView(generics.ListCreateAPIView):
-    serializer_class = AnnouncementSerializer
-    queryset = Announcement.objects.all()"""
-
-
-class AnnouncementsViewSet(viewsets.ModelViewSet):
+class AnnouncementsListCreateAPIView(generics.ListCreateAPIView):
     """All announcements endpoint"""
     serializer_class = AnnouncementSerializer
     queryset = Announcement.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        request.data['user'] = request.user.pk
+        return super().create(request, *args, **kwargs)
+
+
+class AnnouncementRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """Single announcement endpoit"""
+    serializer_class = AnnouncementSerializer
+
+    def get_queryset(self):
+        return Announcement.objects.filter(pk=self.kwargs['pk'])
+
+
+"""class AnnouncementsViewSet(viewsets.ModelViewSet):
+    serializer_class = AnnouncementSerializer
+    queryset = Announcement.objects.all()"""
 
 
 class ClassesViewSet(viewsets.ViewSet):
