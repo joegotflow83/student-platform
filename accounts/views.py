@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse
+from rest_framework import Token
 
 from .models import UserProfile
 from dashboard.models import Schedule
@@ -16,6 +17,7 @@ class StudentSignup(CreateView):
         new_student = form.save()
         UserProfile.objects.create(user=new_student)
         Schedule.objects.create(user=new_student)
+        Token.objects.create(user=new_student)
         return super().form_valid(form)
 
     def get_success_url(self):

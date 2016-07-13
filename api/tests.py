@@ -51,3 +51,8 @@ class APITest(APITestCase):
         user = User.objects.create(username='joe')
         resp = self.client.get(reverse('retrieve_update_destroy_user', args=[user.pk]))
         self.assertTrue(resp.status_code, 200)
+
+    def test_all_announcements_api(self):
+        """Test that all announcements are displayed at endpoint"""
+        resp = self.client.get(reverse('list_create_announcements'))
+        self.assertTrue(resp.status_code, 200)
